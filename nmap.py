@@ -25,6 +25,17 @@ class nmap:
         
         return True
 
+    def get_servicename(self, port_num):
+            service_name = socket.getservbyport(port_num, 'tcp')
+            return service_name
+        
+    def check_ports(self, fport, eport):
+        for port in range(fport, eport):
+            if nm.is_open(port):
+                service_name = nm.get_servicename(port)
+                print(f"open port detected: {host_ip}\t-- port: {port}\t-- Service: {service_name}")
+
+
 
 host_ip = sys.argv[1]
 
@@ -39,3 +50,4 @@ check = sys.argv[2]
 
 fport = int(sys.argv[2])
 eport = int(sys.argv[3])
+nm.check_ports(fport=fport, eport=eport)
