@@ -35,19 +35,47 @@ class nmap:
                 service_name = nm.get_servicename(port)
                 print(f"open port detected: {host_ip}\t-- port: {port}\t-- Service: {service_name}")
 
+    def http_req(self, msg):
+        self.s.send(msg)
+
+        print(self.s.recv(1024).decode())
 
 
-host_ip = sys.argv[1]
+check = sys.argv[1]
+if "POST" in check:
+    user_name = sys.argv[2]
+    user_age = sys.argv[3]
 
-nm = nmap(IP=host_ip, headersize=10)
+    msg = f'POST {user_name} {user_age}'
 
-if nm.is_online():
-    print(f"{host_ip} is online.")
+    nm = nmap(IP=socket.gethostname(), headersize=1024)
+    if nm.is_open(1234):
+        nm.http_req(msg.encode())
+    else:
+        print("Port is not open!")
+elif "GET" in check:
+    user_id = sys.argv[2]
+
+    msg = f'GET {user_id}'
+
+    nm = nmap(IP=socket.gethostname(), headersize=1024)
+    if nm.is_open(1234):
+        nm.http_req(msg.encode())
+    else:
+        print("Port is not open!")
+
 else:
-    print(f"{host_ip} is offline.")
+    host_ip = sys.argv[1]
 
-check = sys.argv[2]
+    nm = nmap(IP=host_ip, headersize=10)
 
-fport = int(sys.argv[2])
-eport = int(sys.argv[3])
-nm.check_ports(fport=fport, eport=eport)
+    if nm.is_online():
+        print(f"{host_ip} is online.")
+    else:
+        print(f"{host_ip} is offline.")
+
+    check = sys.argv[2]
+
+    fport = int(sys.argv[2])
+    eport = int(sys.argv[3])
+    nm.check_ports(fport=fport, eport=eport)
