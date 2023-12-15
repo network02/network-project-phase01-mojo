@@ -21,12 +21,15 @@ class nmap:
             s.connect((self.HOST_IP, port_num))
         except socket.error:
             return False
-        
+
         return True
 
     def get_servicename(self, port_num):
+        try:
             service_name = socket.getservbyport(port_num, 'tcp')
             return service_name
+        except OSError as e:
+            print(f"Error: {e}")
 
     def check_ports(self, fport, eport):
         for port in range(fport, eport):
@@ -75,6 +78,7 @@ else:
 
     check = sys.argv[2]
 
-    fport = int(sys.argv[2])
-    eport = int(sys.argv[3])
-    nm.check_ports(fport=fport, eport=eport)
+    if len(sys.argv) == 4:
+        fport = int(sys.argv[2])
+        eport = int(sys.argv[3])
+        nm.check_ports(fport=fport, eport=eport)
