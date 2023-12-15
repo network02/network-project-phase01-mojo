@@ -2,10 +2,6 @@ import socket
 import sys
 
 class nmap:
-    HOST_IP = socket.gethostname()
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    HEADERSIZE = 10
-
     def __init__(self, IP, headersize):
         self.HOST_IP = IP
         self.HEADERSIZE = headersize
@@ -21,7 +17,9 @@ class nmap:
 
     def is_open(self, port_num):
         try:
-            self.s.connect((self.HOST_IP, port_num))
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(5)
+            s.connect((self.HOST_IP, port_num))
         except socket.error:
             return False
         
