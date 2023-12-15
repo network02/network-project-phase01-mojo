@@ -11,11 +11,13 @@ class nmap:
         self.HEADERSIZE = headersize
 
     def is_online(self):
-        try:
-            socket.gethostbyaddr(self.HOST_IP)
-        except socket.error:
-            return False
-        return True
+        test_ports = [20, 22, 25, 53, 80, 123, 443]
+
+        for port in test_ports:
+            if self.is_open(port):
+                return True
+
+        return False
 
     def is_open(self, port_num):
         try:
