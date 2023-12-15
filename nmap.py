@@ -2,9 +2,8 @@ import socket
 import sys
 
 class nmap:
-    def __init__(self, IP, headersize):
+    def __init__(self, IP):
         self.HOST_IP = IP
-        self.HEADERSIZE = headersize
 
     def is_online(self):
         test_ports = [20, 22, 25, 53, 80, 123, 443]
@@ -28,7 +27,7 @@ class nmap:
     def get_servicename(self, port_num):
             service_name = socket.getservbyport(port_num, 'tcp')
             return service_name
-        
+
     def check_ports(self, fport, eport):
         for port in range(fport, eport):
             if nm.is_open(port):
@@ -48,7 +47,7 @@ if "POST" in check:
 
     msg = f'POST {user_name} {user_age}'
 
-    nm = nmap(IP=socket.gethostname(), headersize=1024)
+    nm = nmap(IP=socket.gethostname())
     if nm.is_open(1234):
         nm.http_req(msg.encode())
     else:
@@ -58,7 +57,7 @@ elif "GET" in check:
 
     msg = f'GET {user_id}'
 
-    nm = nmap(IP=socket.gethostname(), headersize=1024)
+    nm = nmap(IP=socket.gethostname())
     if nm.is_open(1234):
         nm.http_req(msg.encode())
     else:
@@ -67,7 +66,7 @@ elif "GET" in check:
 else:
     host_ip = sys.argv[1]
 
-    nm = nmap(IP=host_ip, headersize=10)
+    nm = nmap(IP=host_ip)
 
     if nm.is_online():
         print(f"{host_ip} is online.")
